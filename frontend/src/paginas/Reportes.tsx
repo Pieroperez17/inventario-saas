@@ -27,16 +27,16 @@ function Valorizado() {
         <>
           <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="tarjeta">
-              <p className="text-sm text-slate-400">Ítems</p>
-              <p className="text-xl font-bold">{formatearNumero(data.totales.items)}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Ítems</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-slate-100">{formatearNumero(data.totales.items)}</p>
             </div>
             <div className="tarjeta">
-              <p className="text-sm text-slate-400">Valor a costo</p>
-              <p className="text-xl font-bold text-emerald-400">{formatearMoneda(data.totales.valorCompra, moneda)}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Valor a costo</p>
+              <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{formatearMoneda(data.totales.valorCompra, moneda)}</p>
             </div>
             <div className="tarjeta">
-              <p className="text-sm text-slate-400">Valor a venta</p>
-              <p className="text-xl font-bold text-marca-300">{formatearMoneda(data.totales.valorVenta, moneda)}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Valor a venta</p>
+              <p className="text-xl font-bold text-marca-600 dark:text-marca-300">{formatearMoneda(data.totales.valorVenta, moneda)}</p>
             </div>
           </div>
           <Tabla
@@ -122,11 +122,11 @@ export default function Reportes() {
   return (
     <div>
       <EncabezadoPagina titulo="Reportes" descripcion="Inventario valorizado y kardex por producto" />
-      <div className="mb-4 inline-flex rounded-lg border border-slate-800 bg-slate-900 p-1">
+      <div className="mb-4 inline-flex rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-900">
         {(['valorizado', 'kardex'] as Tab[]).map((t) => (
           <button
             key={t}
-            className={clsx('rounded-md px-3 py-1.5 text-sm font-medium transition', tab === t ? 'bg-marca-600 text-white' : 'text-slate-400 hover:text-slate-200')}
+            className={clsx('rounded-md px-3 py-1.5 text-sm font-medium transition', tab === t ? 'bg-marca-600 text-white' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200')}
             onClick={() => setTab(t)}
           >
             {t === 'valorizado' ? 'Inventario valorizado' : 'Kardex'}

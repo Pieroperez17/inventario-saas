@@ -22,9 +22,9 @@ export function Tabla<T extends { id: string }>({
   vacio = 'No hay registros para mostrar.',
 }: Props<T>) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-800">
+    <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
       <table className="min-w-full text-left text-sm">
-        <thead className="bg-slate-900 text-xs uppercase tracking-wide text-slate-400">
+        <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600 dark:bg-slate-900 dark:text-slate-400">
           <tr>
             {columnas.map((c) => (
               <th key={c.clave} className={`px-4 py-3 font-medium ${c.className ?? ''}`}>
@@ -33,7 +33,7 @@ export function Tabla<T extends { id: string }>({
             ))}
           </tr>
         </thead>
-        <tbody className="bg-slate-900/40">
+        <tbody className="bg-white dark:bg-slate-900/40">
           {cargando ? (
             <FilasSkeleton columnas={columnas.length} />
           ) : datos.length === 0 ? (
@@ -44,9 +44,15 @@ export function Tabla<T extends { id: string }>({
             </tr>
           ) : (
             datos.map((fila) => (
-              <tr key={fila.id} className="border-t border-slate-800 hover:bg-slate-800/40">
+              <tr
+                key={fila.id}
+                className="border-t border-slate-100 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/40"
+              >
                 {columnas.map((c) => (
-                  <td key={c.clave} className={`px-4 py-3 text-slate-200 ${c.className ?? ''}`}>
+                  <td
+                    key={c.clave}
+                    className={`px-4 py-3 text-slate-800 dark:text-slate-200 ${c.className ?? ''}`}
+                  >
                     {c.render ? c.render(fila) : ((fila as Record<string, ReactNode>)[c.clave] ?? '—')}
                   </td>
                 ))}

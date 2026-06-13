@@ -42,35 +42,37 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4 dark:bg-slate-950">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-2">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-marca-600">
             <Boxes className="h-7 w-7 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-100">Inventario SaaS</h1>
-          <p className="text-sm text-slate-400">Inicia sesión en tu cuenta</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Inventario SaaS</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Inicia sesión en tu cuenta</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="tarjeta space-y-4">
           <div>
             <label className="etiqueta">Email</label>
             <input className="campo" type="email" autoComplete="email" {...register('email')} />
-            {errors.email && <p className="mt-1 text-xs text-rose-400">{errors.email.message}</p>}
+            {errors.email && <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{errors.email.message}</p>}
           </div>
           <div>
             <label className="etiqueta">Contraseña</label>
             <input className="campo" type="password" autoComplete="current-password" {...register('password')} />
-            {errors.password && <p className="mt-1 text-xs text-rose-400">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{errors.password.message}</p>
+            )}
           </div>
           <button type="submit" className="btn-primario w-full" disabled={isSubmitting}>
             <LogIn className="h-4 w-4" />
             {isSubmitting ? 'Ingresando…' : 'Ingresar'}
           </button>
 
-          <p className="text-center text-sm text-slate-400">
+          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
             ¿No tienes cuenta?{' '}
-            <Link to="/registro" className="font-medium text-marca-400 hover:text-marca-300">
+            <Link to="/registro" className="font-medium text-marca-600 hover:text-marca-500 dark:text-marca-400 dark:hover:text-marca-300">
               Registra tu empresa
             </Link>
           </p>

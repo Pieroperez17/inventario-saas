@@ -43,15 +43,27 @@ export default function Configuracion() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="tarjeta">
-          <h3 className="mb-4 font-semibold text-slate-100">Mi perfil</h3>
+          <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Mi perfil</h3>
           <dl className="space-y-2 text-sm">
-            <div className="flex justify-between"><dt className="text-slate-400">Nombre</dt><dd className="text-slate-200">{usuario?.nombres} {usuario?.apellidos}</dd></div>
-            <div className="flex justify-between"><dt className="text-slate-400">Email</dt><dd className="text-slate-200">{usuario?.email}</dd></div>
-            <div className="flex justify-between"><dt className="text-slate-400">Rol</dt><dd><Badge variante="morado">{usuario?.rol.nombre}</Badge></dd></div>
-            <div className="flex justify-between"><dt className="text-slate-400">Empresa</dt><dd className="text-slate-200">{empresa?.razonSocial}</dd></div>
+            <div className="flex justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Nombre</dt>
+              <dd className="text-slate-800 dark:text-slate-200">{usuario?.nombres} {usuario?.apellidos}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Email</dt>
+              <dd className="text-slate-800 dark:text-slate-200">{usuario?.email}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Rol</dt>
+              <dd><Badge variante="morado">{usuario?.rol.nombre}</Badge></dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Empresa</dt>
+              <dd className="text-slate-800 dark:text-slate-200">{empresa?.razonSocial}</dd>
+            </div>
           </dl>
 
-          <h3 className="mb-3 mt-6 font-semibold text-slate-100">Apariencia</h3>
+          <h3 className="mb-3 mt-6 font-semibold text-slate-900 dark:text-slate-100">Apariencia</h3>
           <button className="btn-secundario" onClick={alternar}>
             {tema === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             Cambiar a tema {tema === 'dark' ? 'claro' : 'oscuro'}
@@ -59,7 +71,7 @@ export default function Configuracion() {
         </div>
 
         <div className="tarjeta">
-          <h3 className="mb-4 font-semibold text-slate-100">Cambiar contraseña</h3>
+          <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Cambiar contraseña</h3>
           <form onSubmit={form.handleSubmit((v) => cambiar.mutate(v))} className="space-y-4">
             <CampoTexto form={form} nombre="actual" etiqueta="Contraseña actual" tipo="password" />
             <CampoTexto form={form} nombre="nueva" etiqueta="Nueva contraseña" tipo="password" />

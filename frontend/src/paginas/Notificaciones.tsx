@@ -51,13 +51,15 @@ export default function Notificaciones() {
               onClick={() => !n.leida && leer.mutate(n.id)}
               className={clsx(
                 'flex w-full items-start gap-3 rounded-lg border p-4 text-left transition',
-                n.leida ? 'border-slate-800 bg-slate-900/40' : 'border-marca-600/40 bg-marca-600/10 hover:bg-marca-600/20',
+                n.leida
+                  ? 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40'
+                  : 'border-marca-600/40 bg-marca-600/10 hover:bg-marca-600/20',
               )}
             >
-              <span className={clsx('mt-1 h-2 w-2 shrink-0 rounded-full', n.leida ? 'bg-slate-600' : 'bg-marca-400')} />
+              <span className={clsx('mt-1 h-2 w-2 shrink-0 rounded-full', n.leida ? 'bg-slate-400 dark:bg-slate-600' : 'bg-marca-500 dark:bg-marca-400')} />
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-slate-100">{n.titulo}</p>
-                <p className="text-sm text-slate-400">{n.mensaje}</p>
+                <p className="font-medium text-slate-900 dark:text-slate-100">{n.titulo}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{n.mensaje}</p>
                 <p className="mt-1 text-xs text-slate-500">{formatearFechaHora(n.creadoEn)}</p>
               </div>
             </button>

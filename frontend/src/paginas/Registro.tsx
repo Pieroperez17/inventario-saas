@@ -58,24 +58,24 @@ export default function Registro() {
     <div>
       <label className="etiqueta">{etiqueta}</label>
       <input className="campo" type={tipo} {...register(nombre)} />
-      {errors[nombre] && <p className="mt-1 text-xs text-rose-400">{errors[nombre]?.message as string}</p>}
+      {errors[nombre] && <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{errors[nombre]?.message as string}</p>}
     </div>
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4 dark:bg-slate-950">
       <div className="w-full max-w-2xl">
         <div className="mb-6 flex flex-col items-center gap-2">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-marca-600">
             <Boxes className="h-7 w-7 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-100">Registra tu empresa</h1>
-          <p className="text-sm text-slate-400">Crea tu cuenta y empieza a gestionar tu inventario</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Registra tu empresa</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Crea tu cuenta y empieza a gestionar tu inventario</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="tarjeta space-y-5">
           <div>
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Datos de la empresa</h2>
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Datos de la empresa</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {campo('razonSocial', 'Razón social')}
               {campo('ruc', 'RUC')}
@@ -86,7 +86,7 @@ export default function Registro() {
           </div>
 
           <div>
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Administrador de la cuenta
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -100,9 +100,9 @@ export default function Registro() {
           <button type="submit" className="btn-primario w-full" disabled={isSubmitting}>
             {isSubmitting ? 'Registrando…' : 'Crear empresa y cuenta'}
           </button>
-          <p className="text-center text-sm text-slate-400">
+          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
             ¿Ya tienes cuenta?{' '}
-            <Link to="/login" className="font-medium text-marca-400 hover:text-marca-300">
+            <Link to="/login" className="font-medium text-marca-600 hover:text-marca-500 dark:text-marca-400 dark:hover:text-marca-300">
               Inicia sesión
             </Link>
           </p>

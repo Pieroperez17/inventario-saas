@@ -4,7 +4,7 @@ import { MetaPaginacion } from '../tipos/modelos';
 export function Paginacion({ meta, onCambio }: { meta?: MetaPaginacion; onCambio: (pagina: number) => void }) {
   if (!meta || meta.total === 0) return null;
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 px-1 py-3 text-sm text-slate-400">
+    <div className="flex flex-wrap items-center justify-between gap-2 px-1 py-3 text-sm text-slate-600 dark:text-slate-400">
       <span>
         Página {meta.pagina} de {meta.totalPaginas} · {meta.total} registros
       </span>

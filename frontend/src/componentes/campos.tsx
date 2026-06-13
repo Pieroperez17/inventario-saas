@@ -7,7 +7,7 @@ type Form = any;
 function ErrorCampo({ form, nombre }: { form: Form; nombre: string }) {
   const mensaje = form.formState.errors[nombre]?.message as string | undefined;
   if (!mensaje) return null;
-  return <p className="mt-1 text-xs text-rose-400">{mensaje}</p>;
+  return <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{mensaje}</p>;
 }
 
 export function CampoTexto({
@@ -88,8 +88,12 @@ export function CampoSelect({
 
 export function CampoCheck({ form, nombre, etiqueta }: { form: Form; nombre: string; etiqueta: string }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 py-2 text-sm text-slate-300">
-      <input type="checkbox" className="h-4 w-4 rounded border-slate-600 bg-slate-800" {...form.register(nombre)} />
+    <label className="flex cursor-pointer items-center gap-2 py-2 text-sm text-slate-700 dark:text-slate-300">
+      <input
+        type="checkbox"
+        className="h-4 w-4 rounded border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-800"
+        {...form.register(nombre)}
+      />
       {etiqueta}
     </label>
   );

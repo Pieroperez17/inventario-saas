@@ -55,13 +55,13 @@ export default function Inventario() {
       />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-lg border border-slate-800 bg-slate-900 p-1">
+        <div className="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-900">
           {(['consolidado', 'ubicacion'] as Vista[]).map((v) => (
             <button
               key={v}
               className={clsx(
                 'rounded-md px-3 py-1.5 text-sm font-medium transition',
-                vista === v ? 'bg-marca-600 text-white' : 'text-slate-400 hover:text-slate-200',
+                vista === v ? 'bg-marca-600 text-white' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200',
               )}
               onClick={() => cambiarVista(v)}
             >

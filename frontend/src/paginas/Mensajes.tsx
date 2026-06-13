@@ -69,11 +69,11 @@ export default function Mensajes() {
         }
       />
 
-      <div className="mb-4 inline-flex rounded-lg border border-slate-800 bg-slate-900 p-1">
+      <div className="mb-4 inline-flex rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-900">
         {(['bandeja', 'enviados'] as Carpeta[]).map((c) => (
           <button
             key={c}
-            className={clsx('rounded-md px-3 py-1.5 text-sm font-medium transition', carpeta === c ? 'bg-marca-600 text-white' : 'text-slate-400 hover:text-slate-200')}
+            className={clsx('rounded-md px-3 py-1.5 text-sm font-medium transition', carpeta === c ? 'bg-marca-600 text-white' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200')}
             onClick={() => setCarpeta(c)}
           >
             {c === 'bandeja' ? 'Recibidos' : 'Enviados'}
@@ -86,23 +86,23 @@ export default function Mensajes() {
       ) : (lista.data?.datos.length ?? 0) === 0 ? (
         <div className="tarjeta py-12 text-center text-slate-500">No hay mensajes.</div>
       ) : (
-        <div className="divide-y divide-slate-800 overflow-hidden rounded-xl border border-slate-800">
+        <div className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 dark:divide-slate-800 dark:border-slate-800">
           {lista.data!.datos.map((m) => {
             const otro = carpeta === 'bandeja' ? m.remitente : m.destinatario;
             return (
               <button
                 key={m.id}
                 onClick={() => abrir(m)}
-                className={clsx('flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-slate-800/40', carpeta === 'bandeja' && !m.leido && 'bg-marca-600/10')}
+                className={clsx('flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-800/40', carpeta === 'bandeja' && !m.leido && 'bg-marca-600/10')}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="truncate text-sm font-medium text-slate-100">
+                    <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
                       {otro.nombres} {otro.apellidos}
                     </p>
                     {carpeta === 'bandeja' && !m.leido && <Badge variante="morado">Nuevo</Badge>}
                   </div>
-                  <p className="truncate text-sm text-slate-400">{m.asunto || '(Sin asunto)'} — {m.cuerpo}</p>
+                  <p className="truncate text-sm text-slate-600 dark:text-slate-400">{m.asunto || '(Sin asunto)'} — {m.cuerpo}</p>
                 </div>
                 <span className="shrink-0 text-xs text-slate-500">{formatearFechaHora(m.creadoEn)}</span>
               </button>
@@ -133,11 +133,11 @@ export default function Mensajes() {
       <Modal abierto={!!abierto} titulo={abierto?.asunto || '(Sin asunto)'} onCerrar={() => setAbierto(null)}>
         {abierto && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-sm text-slate-400">
+            <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
               <span>De: {abierto.remitente.nombres} {abierto.remitente.apellidos}</span>
               <span>{formatearFechaHora(abierto.creadoEn)}</span>
             </div>
-            <p className="whitespace-pre-wrap text-slate-200">{abierto.cuerpo}</p>
+            <p className="whitespace-pre-wrap text-slate-800 dark:text-slate-200">{abierto.cuerpo}</p>
           </div>
         )}
       </Modal>
