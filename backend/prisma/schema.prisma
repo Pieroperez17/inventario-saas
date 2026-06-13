@@ -1,0 +1,392 @@
+// ============================================================================
+//  Esquema de base de datos — Sistema SaaS de Gestión de Inventario
+//  ORM: Prisma · Motor: PostgreSQL
+//  Convención: nombres en español. Cada tabla multiempresa lleva `empresaId`.
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================== ENUMERACIONES ===============================
+
+/// Tipo de ubicación física donde se guarda el stock.
+enum TipoUbicacion {
+  ALMACEN
+  TIENDA
+}
+
+/// Naturaleza de un movimiento de inventario.
+enum TipoMovimiento {
+  ENTRADA
+  SALIDA
+  TRANSFERENCIA
+}
+
+/// Categoría de una notificación del sistema.
+enum TipoNotificacion {
+  STOCK_MINIMO
+  MOVIMIENTO
+  TRANSFERENCIA
+  USUARIO
+  MENSAJE
+  GENERAL
+}
+
+// ================================ EMPRESA ===================================
+// Tenant raíz. Toda la información del sistema cuelga de una Empresa.
+
+model Empresa {
+  id            String   @id @default(uuid())
+  razonSocial   String
+  ruc           String   @unique
+  direccion     String?
+  telefono      String?
+  email         String
+  logo          String?
+  moneda        String   @default("PEN")
+  zonaHoraria   String   @default("America/Lima")
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  usuarios       Usuario[]
+  almacenes      Almacen[]
+  tiendas        Tienda[]
+  categorias     Categoria[]
+  productos      Producto[]
+  inventario     Inventario[]
+  movimientos    MovimientoInventario[]
+  proveedores    Proveedor[]
+  notificaciones Notificacion[]
+  mensajes       Mensaje[]
+  auditoria      RegistroAuditoria[]
+
+  @@map("empresas")
+}
+
+// ====================== USUARIOS, ROLES Y PERMISOS ==========================
+
+model Usuario {
+  id            String    @id @default(uuid())
+  empresaId     String
+  nombres       String
+  apellidos     String
+  email         String    @unique
+  passwordHash  String
+  rolId         String
+  activo        Boolean   @default(true)
+  ultimoAcceso  DateTime?
+  creadoEn      DateTime  @default(now())
+  actualizadoEn DateTime  @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  rol     Rol     @relation(fields: [rolId], references: [id])
+
+  tokensRefresh     TokenRefresh[]
+  movimientos       MovimientoInventario[]
+  auditoria         RegistroAuditoria[]
+  notificaciones    Notificacion[]
+  mensajesEnviados  Mensaje[]              @relation("MensajesEnviados")
+  mensajesRecibidos Mensaje[]              @relation("MensajesRecibidos")
+
+  @@index([empresaId])
+  @@map("usuarios")
+}
+
+/// Catálogo global de roles (Administrador, Editor, Visualizador).
+model Rol {
+  id          String   @id @default(uuid())
+  nombre      String   @unique
+  descripcion String?
+  esSistema   Boolean  @default(true)
+  creadoEn    DateTime @default(now())
+
+  usuarios Usuario[]
+  permisos RolPermiso[]
+
+  @@map("roles")
+}
+
+/// Catálogo de permisos granulares por módulo (escalabilidad futura).
+model Permiso {
+  id          String  @id @default(uuid())
+  codigo      String  @unique // ej.: "productos.crear"
+  modulo      String // ej.: "productos"
+  descripcion String?
+
+  roles RolPermiso[]
+
+  @@map("permisos")
+}
+
+/// Tabla puente Rol ↔ Permiso.
+model RolPermiso {
+  rolId     String
+  permisoId String
+
+  rol     Rol     @relation(fields: [rolId], references: [id], onDelete: Cascade)
+  permiso Permiso @relation(fields: [permisoId], references: [id], onDelete: Cascade)
+
+  @@id([rolId, permisoId])
+  @@map("roles_permisos")
+}
+
+/// Tokens de refresco (refresh tokens) para rotación y multi-dispositivo.
+model TokenRefresh {
+  id        String   @id @default(uuid())
+  usuarioId String
+  tokenHash String   @unique
+  revocado  Boolean  @default(false)
+  expiraEn  DateTime
+  creadoEn  DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@map("tokens_refresh")
+}
+
+// ========================== ALMACENES Y TIENDAS =============================
+
+model Almacen {
+  id            String   @id @default(uuid())
+  empresaId     String
+  nombre        String
+  direccion     String?
+  responsable   String?
+  telefono      String?
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@map("almacenes")
+}
+
+model Tienda {
+  id            String   @id @default(uuid())
+  empresaId     String
+  nombre        String
+  direccion     String?
+  responsable   String?
+  telefono      String?
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@map("tiendas")
+}
+
+// ========================= CATEGORÍAS Y PRODUCTOS ===========================
+
+model Categoria {
+  id            String   @id @default(uuid())
+  empresaId     String
+  nombre        String
+  descripcion   String?
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  empresa   Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  productos Producto[]
+
+  @@unique([empresaId, nombre])
+  @@index([empresaId])
+  @@map("categorias")
+}
+
+model Producto {
+  id            String   @id @default(uuid())
+  empresaId     String
+  sku           String
+  nombre        String
+  descripcion   String?
+  categoriaId   String?
+  unidadMedida  String   @default("UNIDAD")
+  precioCompra  Decimal  @default(0) @db.Decimal(12, 2)
+  precioVenta   Decimal  @default(0) @db.Decimal(12, 2)
+  stockMinimo   Decimal  @default(0) @db.Decimal(12, 2)
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  empresa   Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  categoria Categoria? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+
+  inventario  Inventario[]
+  movimientos MovimientoInventario[]
+  proveedores ProductoProveedor[]
+
+  @@unique([empresaId, sku])
+  @@index([empresaId])
+  @@index([categoriaId])
+  @@map("productos")
+}
+
+// ============================ INVENTARIO / STOCK ============================
+// Cantidad de un producto en una ubicación concreta (almacén o tienda).
+// La ubicación es polimórfica: (ubicacionTipo, ubicacionId). La integridad
+// referencial de la ubicación se valida en la capa de servicios.
+
+model Inventario {
+  id            String        @id @default(uuid())
+  empresaId     String
+  productoId    String
+  ubicacionTipo TipoUbicacion
+  ubicacionId   String
+  cantidad      Decimal       @default(0) @db.Decimal(14, 2)
+  creadoEn      DateTime      @default(now())
+  actualizadoEn DateTime      @updatedAt
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
+
+  @@unique([productoId, ubicacionTipo, ubicacionId])
+  @@index([empresaId])
+  @@index([ubicacionTipo, ubicacionId])
+  @@map("inventario")
+}
+
+// ========================= MOVIMIENTOS DE INVENTARIO ========================
+// Entradas, salidas y transferencias. Origen y destino son polimórficos.
+//  - ENTRADA:       solo destino
+//  - SALIDA:        solo origen
+//  - TRANSFERENCIA: origen y destino
+
+model MovimientoInventario {
+  id          String         @id @default(uuid())
+  empresaId   String
+  tipo        TipoMovimiento
+  productoId  String
+  cantidad    Decimal        @db.Decimal(14, 2)
+  motivo      String?
+  origenTipo  TipoUbicacion?
+  origenId    String?
+  destinoTipo TipoUbicacion?
+  destinoId   String?
+  usuarioId   String?
+  proveedorId String?
+  fecha       DateTime       @default(now())
+  creadoEn    DateTime       @default(now())
+
+  empresa   Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto  Producto   @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  usuario   Usuario?   @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  proveedor Proveedor? @relation(fields: [proveedorId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId])
+  @@index([productoId])
+  @@index([fecha])
+  @@map("movimientos_inventario")
+}
+
+// ================================ PROVEEDORES ===============================
+
+model Proveedor {
+  id            String   @id @default(uuid())
+  empresaId     String
+  razonSocial   String
+  ruc           String?
+  contacto      String?
+  telefono      String?
+  email         String?
+  direccion     String?
+  activo        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  empresa     Empresa                @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  productos   ProductoProveedor[]
+  movimientos MovimientoInventario[]
+
+  @@index([empresaId])
+  @@map("proveedores")
+}
+
+/// Tabla puente Producto ↔ Proveedor.
+model ProductoProveedor {
+  productoId  String
+  proveedorId String
+  creadoEn    DateTime @default(now())
+
+  producto  Producto  @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  proveedor Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Cascade)
+
+  @@id([productoId, proveedorId])
+  @@map("productos_proveedores")
+}
+
+// ====================== NOTIFICACIONES Y MENSAJERÍA =========================
+
+model Notificacion {
+  id        String           @id @default(uuid())
+  empresaId String
+  usuarioId String
+  tipo      TipoNotificacion @default(GENERAL)
+  titulo    String
+  mensaje   String
+  leida     Boolean          @default(false)
+  datos     Json?
+  creadoEn  DateTime         @default(now())
+  leidaEn   DateTime?
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([usuarioId, leida])
+  @@map("notificaciones")
+}
+
+model Mensaje {
+  id             String    @id @default(uuid())
+  empresaId      String
+  remitenteId    String
+  destinatarioId String
+  asunto         String?
+  cuerpo         String
+  leido          Boolean   @default(false)
+  creadoEn       DateTime  @default(now())
+  leidoEn        DateTime?
+
+  empresa      Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  remitente    Usuario @relation("MensajesEnviados", fields: [remitenteId], references: [id], onDelete: Cascade)
+  destinatario Usuario @relation("MensajesRecibidos", fields: [destinatarioId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([destinatarioId, leido])
+  @@map("mensajes")
+}
+
+// ============================ REGISTRO DE AUDITORÍA =========================
+
+model RegistroAuditoria {
+  id        String   @id @default(uuid())
+  empresaId String
+  usuarioId String?
+  accion    String // ej.: CREAR, ACTUALIZAR, ELIMINAR, LOGIN
+  entidad   String // ej.: Producto, Usuario
+  entidadId String?
+  detalles  Json?
+  ip        String?
+  creadoEn  DateTime @default(now())
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  usuario Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId])
+  @@index([entidad, entidadId])
+  @@map("registros_auditoria")
+}
