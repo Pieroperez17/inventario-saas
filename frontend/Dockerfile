@@ -8,7 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-# VITE_API_URL se deja sin definir: en producción se usa /api/v1 (proxy Nginx).
+# En Railway se inyecta VITE_API_URL=https://<backend>.railway.app/api/v1
+# En local (docker-compose) se inyecta VITE_API_URL=http://localhost:4000/api/v1
+ARG VITE_API_URL=""
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # --- Etapa de servidor ---
