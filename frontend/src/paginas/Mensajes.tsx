@@ -84,7 +84,7 @@ export default function Mensajes() {
       {lista.isLoading ? (
         <Spinner />
       ) : (lista.data?.datos.length ?? 0) === 0 ? (
-        <div className="tarjeta py-12 text-center text-slate-500">No hay mensajes.</div>
+        <div className="tarjeta py-12 text-center text-slate-600 dark:text-slate-400">No hay mensajes.</div>
       ) : (
         <div className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 dark:divide-slate-800 dark:border-slate-800">
           {lista.data!.datos.map((m) => {
@@ -104,7 +104,7 @@ export default function Mensajes() {
                   </div>
                   <p className="truncate text-sm text-slate-600 dark:text-slate-400">{m.asunto || '(Sin asunto)'} — {m.cuerpo}</p>
                 </div>
-                <span className="shrink-0 text-xs text-slate-500">{formatearFechaHora(m.creadoEn)}</span>
+                <span className="shrink-0 text-xs text-slate-600 dark:text-slate-400">{formatearFechaHora(m.creadoEn)}</span>
               </button>
             );
           })}

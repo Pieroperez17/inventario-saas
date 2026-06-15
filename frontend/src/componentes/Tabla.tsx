@@ -38,7 +38,7 @@ export function Tabla<T extends { id: string }>({
             <FilasSkeleton columnas={columnas.length} />
           ) : datos.length === 0 ? (
             <tr>
-              <td colSpan={columnas.length} className="px-4 py-12 text-center text-slate-500">
+              <td colSpan={columnas.length} className="px-4 py-12 text-center text-slate-600 dark:text-slate-400">
                 {vacio}
               </td>
             </tr>

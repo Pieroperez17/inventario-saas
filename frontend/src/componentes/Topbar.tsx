@@ -81,7 +81,7 @@ export function Topbar({ onMenu }: { onMenu: () => void }) {
               <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                 {usuario?.nombres} {usuario?.apellidos}
               </p>
-              <p className="text-xs text-slate-500">{usuario?.rol.nombre}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{usuario?.rol.nombre}</p>
             </div>
           </button>
           {menu && (
@@ -92,7 +92,7 @@ export function Topbar({ onMenu }: { onMenu: () => void }) {
                   <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                     {usuario?.nombres} {usuario?.apellidos}
                   </p>
-                  <p className="truncate text-xs text-slate-500">{usuario?.email}</p>
+                  <p className="truncate text-xs text-slate-600 dark:text-slate-400">{usuario?.email}</p>
                 </div>
                 <button
                   className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"

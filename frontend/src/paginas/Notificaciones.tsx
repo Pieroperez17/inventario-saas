@@ -39,7 +39,7 @@ export default function Notificaciones() {
       {isLoading ? (
         <Spinner />
       ) : (data?.datos.length ?? 0) === 0 ? (
-        <div className="tarjeta py-12 text-center text-slate-500">
+        <div className="tarjeta py-12 text-center text-slate-600 dark:text-slate-400">
           <Bell className="mx-auto mb-2 h-8 w-8 opacity-50" />
           No tienes notificaciones.
         </div>
@@ -60,7 +60,7 @@ export default function Notificaciones() {
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-slate-900 dark:text-slate-100">{n.titulo}</p>
                 <p className="text-sm text-slate-600 dark:text-slate-400">{n.mensaje}</p>
-                <p className="mt-1 text-xs text-slate-500">{formatearFechaHora(n.creadoEn)}</p>
+                <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{formatearFechaHora(n.creadoEn)}</p>
               </div>
             </button>
           ))}

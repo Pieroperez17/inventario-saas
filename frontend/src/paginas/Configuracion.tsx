@@ -46,19 +46,19 @@ export default function Configuracion() {
           <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Mi perfil</h3>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Nombre</dt>
+              <dt className="text-slate-600 dark:text-slate-400">Nombre</dt>
               <dd className="text-slate-800 dark:text-slate-200">{usuario?.nombres} {usuario?.apellidos}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Email</dt>
+              <dt className="text-slate-600 dark:text-slate-400">Email</dt>
               <dd className="text-slate-800 dark:text-slate-200">{usuario?.email}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Rol</dt>
+              <dt className="text-slate-600 dark:text-slate-400">Rol</dt>
               <dd><Badge variante="morado">{usuario?.rol.nombre}</Badge></dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Empresa</dt>
+              <dt className="text-slate-600 dark:text-slate-400">Empresa</dt>
               <dd className="text-slate-800 dark:text-slate-200">{empresa?.razonSocial}</dd>
             </div>
           </dl>

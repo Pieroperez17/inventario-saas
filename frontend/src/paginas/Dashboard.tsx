@@ -81,7 +81,7 @@ export default function Dashboard() {
         <div className="tarjeta">
           <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Existencias por ubicación</h3>
           {existenciasPorUbicacion.length === 0 ? (
-            <p className="py-10 text-center text-sm text-slate-500">Sin datos de inventario.</p>
+            <p className="py-10 text-center text-sm text-slate-600 dark:text-slate-400">Sin datos de inventario.</p>
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={existenciasPorUbicacion}>
@@ -102,7 +102,7 @@ export default function Dashboard() {
         <div className="tarjeta">
           <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Top productos por stock</h3>
           {topProductos.length === 0 ? (
-            <p className="py-10 text-center text-sm text-slate-500">Sin datos.</p>
+            <p className="py-10 text-center text-sm text-slate-600 dark:text-slate-400">Sin datos.</p>
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={topProductos} layout="vertical" margin={{ left: 20 }}>
@@ -120,7 +120,7 @@ export default function Dashboard() {
       <div className="mt-6 tarjeta">
         <h3 className="mb-4 font-semibold text-slate-900 dark:text-slate-100">Movimientos recientes</h3>
         {movimientosRecientes.length === 0 ? (
-          <p className="py-6 text-center text-sm text-slate-500">Aún no hay movimientos.</p>
+          <p className="py-6 text-center text-sm text-slate-600 dark:text-slate-400">Aún no hay movimientos.</p>
         ) : (
           <ul className="divide-y divide-slate-100 dark:divide-slate-800">
             {movimientosRecientes.map((m) => (
@@ -131,12 +131,12 @@ export default function Dashboard() {
                   </Badge>
                   <div>
                     <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{m.producto.nombre}</p>
-                    <p className="text-xs text-slate-500">{m.producto.sku}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">{m.producto.sku}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{formatearNumero(m.cantidad)}</p>
-                  <p className="text-xs text-slate-500">{formatearFechaHora(m.fecha)}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">{formatearFechaHora(m.fecha)}</p>
                 </div>
               </li>
             ))}

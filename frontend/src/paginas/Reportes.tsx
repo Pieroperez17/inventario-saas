@@ -93,7 +93,7 @@ function Kardex() {
       </div>
 
       {!productoId ? (
-        <p className="py-10 text-center text-sm text-slate-500">Selecciona un producto para ver su kardex.</p>
+        <p className="py-10 text-center text-sm text-slate-600 dark:text-slate-400">Selecciona un producto para ver su kardex.</p>
       ) : kardex.isLoading ? (
         <Spinner texto="Cargando kardex…" />
       ) : (

@@ -67,7 +67,7 @@ export function Sidebar({ abierto, onCerrar }: { abierto: boolean; onCerrar: () 
             <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
               {empresa?.razonSocial ?? 'Inventario SaaS'}
             </p>
-            <p className="text-xs text-slate-500">Gestión de inventario</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">Gestión de inventario</p>
           </div>
           <button className="ml-auto lg:hidden" onClick={onCerrar}>
             <X className="h-5 w-5 text-slate-500 dark:text-slate-400" />
